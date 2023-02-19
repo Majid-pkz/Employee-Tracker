@@ -227,6 +227,7 @@ const options = [
         connection.query(query, values, (err, result) => {
           if (err) throw err;
           console.log("employee added");
+          init()
 
           
           
