@@ -29,7 +29,7 @@
 
  Node.js and MySQL  required in order to run this apploication.
 
-## usage
+## Usage
 
 AS A business owner
 I WANT to be able to view and manage the departments, roles, and employees in my company
@@ -39,3 +39,4 @@ SO THAT I can organize and plan my business
 ## contributors
 Majid Kazemi
 ## Mock-Up
+## Demo
