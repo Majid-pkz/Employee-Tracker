@@ -60,7 +60,8 @@ const options = [
           console.log("add employee");
           break;
         case "Update an employee role":
-          //* Bonous  updateEmployeeRole();
+          //* Bonous  updateEmployeeRole
+          updateEmployeeRole();
           console.log("update role");
           break;
         case "Exit":
@@ -180,9 +181,10 @@ const options = [
         });
     });
   }
-  
+
+ 
   function addEmployee() {
-    const query = "SELECT * FROM role";
+    const query = "SELECT id, title FROM role";
     connection.query(query, (err, results) => {
       if (err) throw err;
   
@@ -201,29 +203,62 @@ const options = [
             type: "list",
             name: "role",
             message: `Which role does this employee belong to? check the associated role id from role table`,
-            choices: results.map((role) => role.id),
+            choices: results.map((results) => results.title),
+          },
+          {
+            type: "list",
+            name: "manager",
+            message: `Who is the employee's manager`,
+            choices: results.map((results) => results.title),
           },
       ])
-      
        
     .then((answer) => {
+
+        const filtered= results.filter(item=>item.title===answer.role)
+        const roleId=filtered[0].id
+        const filteredManager=results.filter(item=>item.title===answer.manager)
+        const managerRoleId=filteredManager[0].id
+        
+
+
         const query = "INSERT INTO employee (first_name, last_name, role_id) VALUES (?,?,?)";
-        const values = [answer.first_name,answer.last_name,answer.role];
+        const values = [answer.first_name,answer.last_name,roleId,managerRoleId];
         connection.query(query, values, (err, result) => {
           if (err) throw err;
           console.log("employee added");
-          init();
+
+          
+          
         });
       });
 
 
 
-     });
+
+     });   
+
+    }
+
+    // function updateEmployeeRole(){
+    //     const query = "SELECT * FROM employee";
+
+    //     connection.query(query, (err, results) => {
+    //         if (err) throw err;
+        
+    //         inquirer.prompt([
+    //             {
+    //                 type: "list",
+    //                 name: "employee",
+    //                 message: `Which employee 's role would you like to update?`,
+    //                 choices: results.map((employee) => employee.),
+    //               },
+
+    //         ])
 
 
-    
+    //     })
+    // } 
 
-  }
-  
-//init()
+
  module.exports= init;
