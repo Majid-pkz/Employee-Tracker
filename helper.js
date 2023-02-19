@@ -240,25 +240,63 @@ const options = [
 
     }
 
-    // function updateEmployeeRole(){
-    //     const query = "SELECT * FROM employee";
-
-    //     connection.query(query, (err, results) => {
-    //         if (err) throw err;
+    updateEmployeeRole = () => {
+       
+        const query = `SELECT * FROM employee`;
+      
+        connection.query(query, (err, data) => {
+          if (err) throw err;      
         
-    //         inquirer.prompt([
-    //             {
-    //                 type: "list",
-    //                 name: "employee",
-    //                 message: `Which employee 's role would you like to update?`,
-    //                 choices: results.map((employee) => employee.),
-    //               },
-
-    //         ])
-
-
-    //     })
-    // } 
-
+      
+          inquirer.prompt([
+            {
+              type: 'list',
+              name: 'name',
+              message: "Which employee would you like to update?",
+              choices: data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id })),
+            }
+          ])
+            .then(answer => {
+              const employee = answer.name;
+              const queryValues = []; 
+              queryValues.push(employee);
+      
+              const roleSql = `SELECT * FROM role`;
+      
+              connection.query(roleSql, (err, data) => {
+                if (err) throw err; 
+      
+                             
+                  inquirer.prompt([
+                    {
+                      type: 'list',
+                      name: 'role',
+                      message: "What is the employee's new role?",
+                      choices: data.map(({ id, title }) => ({ name: title, value: id })),
+                    }
+                  ])
+                      .then(roleChoice => {
+                      const role = roleChoice.role;
+                      queryValues.push(role); 
+                      
+                      let employee = queryValues[0]
+                      queryValues[0] = role
+                      queryValues[1] = employee                
+      
+                      
+      
+                      const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+      
+                      connection.query(sql, queryValues, (err, result) => {
+                        if (err) throw err;
+                      console.log("Employee has been updated!");
+                    
+                      init();
+                });
+              });
+            });
+          });
+        });
+      };
 
  module.exports= init;
