@@ -23,6 +23,7 @@
 
     
 * [Mock-up](#Mock-Up)
+*  [Demo](#Demo)
 
     
 ## Installation
